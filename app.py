@@ -149,7 +149,7 @@ def upload():
 
     if request.method == "POST":
 
-        file = request.files["video"]
+        file = request.files["media"]
 
         if file and allowed_file(file.filename):
 
