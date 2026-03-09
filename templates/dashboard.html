@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+</head>
+
+<body>
+
+<h2>Welcome {{username}}</h2>
+
+<a href="/upload">Upload File</a>
+
+<br><br>
+
+<h3>Your Files</h3>
+
+{% for file in files %}
+
+<p>{{file}}</p>
+
+{% if file.endswith('.mp4') or file.endswith('.mkv') or file.endswith('.webm') %}
+
+<video width="400" controls>
+<source src="/media/{{file}}">
+</video>
+
+{% elif file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.png') %}
+
+<img src="/media/{{file}}" width="300">
+
+{% endif %}
+
+<br><br>
+
+{% endfor %}
+
+<a href="/logout">Logout</a>
+
+</body>
+</html>
