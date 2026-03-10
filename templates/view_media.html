@@ -1,32 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>View Media</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Media - Secure Media Vault</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            padding: 40px 20px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #ffffff;
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .media-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .file-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            color: #d1d1d1;
+            font-size: 0.95em;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 14px 35px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        .btn-back {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .media-container {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <h2>🎬 Media Viewer</h2>
 
-<h2>Media Viewer</h2>
+        <div class="media-container">
+            {% if file.endswith('.mp4') or file.endswith('.mkv') or file.endswith('.webm') %}
+                <video width="100%" controls>
+                    <source src="/media/{{file}}">
+                    Your browser does not support the video tag.
+                </video>
+            {% elif file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.png') %}
+                <img src="/media/{{file}}" alt="{{file}}">
+            {% endif %}
 
-{% if file.endswith('.mp4') or file.endswith('.mkv') or file.endswith('.webm') %}
+            <div class="file-info">
+                📁 File: <strong>{{file}}</strong>
+            </div>
+        </div>
 
-<video width="500" controls>
-<source src="/media/{{file}}">
-</video>
-
-{% elif file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.png') %}
-
-<img src="/media/{{file}}" width="400">
-
-{% endif %}
-
-<br><br>
-
-<a href="/delete/{{file}}">Delete Media</a>
-
-<br><br>
-
-<a href="/dashboard">Back to Dashboard</a>
-
+        <div class="action-buttons">
+            <a href="/delete/{{file}}" class="btn btn-delete">🗑️ Delete Media</a>
+            <a href="/dashboard" class="btn btn-back">← Back to Dashboard</a>
+        </div>
+    </div>
 </body>
 </html>

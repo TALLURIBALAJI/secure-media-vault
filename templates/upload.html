@@ -1,28 +1,220 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Upload Media</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Media - Secure Media Vault</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 550px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .upload-icon {
+            text-align: center;
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        h2 {
+            font-size: 2.3em;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        form {
+            margin-top: 25px;
+        }
+
+        label {
+            display: block;
+            color: #e0e0e0;
+            font-size: 1em;
+            margin-bottom: 15px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 50px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            color: #ffffff;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        input[type="file"]:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(138, 43, 226, 0.6);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+        }
+
+        input[type="file"]::file-selector-button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .info-text {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9em;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 40px 30px;
+            }
+
+            h2 {
+                font-size: 1.9em;
+            }
+
+            input[type="file"] {
+                padding: 40px 15px;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <div class="glass-card">
+            <div class="upload-icon">📤</div>
+            <h2>Upload Media</h2>
 
-<h2>Upload Media</h2>
+            <form method="POST" enctype="multipart/form-data">
+                <label>Select Media (Image or Video)</label>
+                
+                <div class="file-input-wrapper">
+                    <input type="file" name="media" required accept="image/*,video/*">
+                </div>
 
-<form method="POST" enctype="multipart/form-data">
+                <button type="submit">🚀 Upload</button>
+                
+                <p class="info-text">Supported formats: MP4, MKV, WebM, JPG, PNG</p>
+            </form>
 
-<label>Select Media (Image or Video)</label><br><br>
-
-<input type="file" name="media" required>
-
-<br><br>
-
-<button type="submit">Upload</button>
-
-</form>
-
-<br>
-
-<a href="/dashboard">Back to Dashboard</a>
-
+            <div class="back-link">
+                <a href="/dashboard">← Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

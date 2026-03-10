@@ -1,75 +1,246 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Secure Media Vault</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            padding: 40px 20px;
+        }
 
-body{
-    font-family: Arial;
-}
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
 
-.file-list{
-    width:70%;
-}
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out;
+        }
 
-.file-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid #ccc;
-    padding:10px 0;
-}
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-.file-name{
-    font-size:16px;
-}
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
-.view-btn{
-    padding:6px 14px;
-    background-color:#007bff;
-    color:white;
-    text-decoration:none;
-    border-radius:4px;
-}
+        h2 {
+            color: #ffffff;
+            font-size: 2em;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
 
-.view-btn:hover{
-    background-color:#0056b3;
-}
+        .welcome {
+            color: #d1d1d1;
+            font-size: 1.1em;
+        }
 
-</style>
+        .user-icon {
+            font-size: 1.5em;
+        }
 
+        /* Action buttons */
+        .action-bar {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            border: 2px solid transparent;
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-logout {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* File list container */
+        .file-list-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .file-list-header {
+            color: #ffffff;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .file-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .file-row:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .file-name {
+            color: #e0e0e0;
+            font-size: 1.05em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-icon {
+            font-size: 1.3em;
+        }
+
+        .view-btn {
+            padding: 10px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
+        }
+
+        .no-files {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 40px;
+            font-size: 1.1em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px 25px;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .file-row {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .view-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h2>🛡️ Secure Media Vault</h2>
+                <p class="welcome"><span class="user-icon">👤</span> Welcome, <strong>{{username}}</strong></p>
+            </div>
+            <div class="action-bar">
+                <a href="/upload" class="btn btn-upload">📤 Upload Media</a>
+                <a href="/logout" class="btn btn-logout">🚪 Logout</a>
+            </div>
+        </div>
 
-<h2>Secure Media Vault</h2>
-
-<p>Welcome {{username}}</p>
-
-<a href="/upload">Upload Media</a>
-
-<br><br>
-
-<div class="file-list">
-
-{% for file in files %}
-
-<div class="file-row">
-
-<span class="file-name">{{file}}</span>
-
-<a class="view-btn" href="/verify/{{file}}">View</a>
-
-</div>
-
-{% endfor %}
-
-</div>
-
-<br>
-
-<a href="/logout">Logout</a>
-
+        <!-- File List -->
+        <div class="file-list-container">
+            <div class="file-list-header">📁 Your Media Files</div>
+            
+            {% if files %}
+                {% for file in files %}
+                <div class="file-row">
+                    <span class="file-name">
+                        <span class="file-icon">📄</span>
+                        {{file}}
+                    </span>
+                    <a class="view-btn" href="/verify/{{file}}">👁️ View</a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-files">
+                    No media files uploaded yet. Click "Upload Media" to get started! 🚀
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </body>
 </html>

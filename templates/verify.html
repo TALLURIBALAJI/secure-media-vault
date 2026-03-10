@@ -1,42 +1,377 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Access Verification</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Verification - Secure Media Vault</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 550px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .verify-icon {
+            text-align: center;
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        h3 {
+            color: #d1d1d1;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .question-box {
+            background: rgba(138, 43, 226, 0.15);
+            border-left: 4px solid rgba(138, 43, 226, 0.6);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            color: #ffffff;
+            font-size: 1.2em;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        form {
+            margin-top: 25px;
+        }
+
+        label {
+            display: block;
+            color: #e0e0e0;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            color: #ffffff;
+            font-size: 1em;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(138, 43, 226, 0.6);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+            transform: translateY(-2px);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .separator {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .separator::before,
+        .separator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .separator::before {
+            left: 0;
+        }
+
+        .separator::after {
+            right: 0;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin-top: 10px;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .error-message {
+            background: rgba(220, 38, 38, 0.2);
+            border: 2px solid rgba(220, 38, 38, 0.6);
+            color: #ff6b6b;
+            padding: 12px 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.95em;
+            font-weight: 600;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Timer display */
+        .timer-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .timer {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 30px;
+            border-radius: 20px;
+            border: 2px solid rgba(138, 43, 226, 0.6);
+            margin-bottom: 10px;
+        }
+
+        .timer-label {
+            color: #d1d1d1;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .timer-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.6);
+        }
+
+        .timer-value.warning {
+            color: #ff6b6b;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.6);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .timer-expired {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid rgba(255, 107, 107, 0.6);
+            color: #ff6b6b;
+            padding: 12px 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 40px 30px;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            .timer-value {
+                font-size: 2em;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <div class="glass-card">
+            <div class="verify-icon">🔐</div>
+            <h2>Media Access Verification</h2>
+            <h3>Choose verification method</h3>
 
-<h2>Media Access Verification</h2>
+            <div class="timer-container">
+                <div class="timer">
+                    <div class="timer-label">⏱️ Time Remaining</div>
+                    <div class="timer-value" id="timer">{{ time_remaining }}</div>
+                </div>
+            </div>
 
-<h3>Solve Math Question</h3>
+            <div class="question-box">
+                🧮 {{question}}
+            </div>
 
-<p>{{question}}</p>
+            <form method="POST" id="verifyForm">
+                <label>Enter Answer</label>
+                <input type="text" name="answer" placeholder="Your answer" id="answerInput">
 
-<form method="POST">
+                <div class="separator">OR</div>
 
-<input type="text" name="answer" placeholder="Enter answer">
+                <label>Enter View Password</label>
+                <input type="password" name="view_password" placeholder="Your view password" id="passwordInput">
 
-<br><br>
+                <button type="submit" id="submitBtn">✅ Verify Access</button>
+                
+                {% if error %}
+                <div class="error-message">{{ error }}</div>
+                {% endif %}
+            </form>
 
-OR
+            <div class="back-link">
+                <a href="/dashboard">← Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
 
-<br><br>
+    <script>
+        let timeRemaining = {{ time_remaining }};
+        const timerElement = document.getElementById('timer');
+        const form = document.getElementById('verifyForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const answerInput = document.getElementById('answerInput');
+        const passwordInput = document.getElementById('passwordInput');
 
-<label>Enter View Password</label><br>
+        function updateTimer() {
+            if (timeRemaining > 0) {
+                timerElement.textContent = timeRemaining;
+                
+                // Change color when less than 10 seconds
+                if (timeRemaining <= 10) {
+                    timerElement.classList.add('warning');
+                } else {
+                    timerElement.classList.remove('warning');
+                }
+                
+                timeRemaining--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                timerElement.textContent = '0';
+                timerElement.classList.add('warning');
+                
+                // Show expired message
+                const expiredMsg = document.createElement('div');
+                expiredMsg.className = 'timer-expired';
+                expiredMsg.innerHTML = '⏰ Time expired! Refreshing question...';
+                form.appendChild(expiredMsg);
+                
+                // Disable form inputs
+                answerInput.disabled = true;
+                passwordInput.disabled = true;
+                submitBtn.disabled = true;
+                
+                // Reload page after 2 seconds to get new question
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            }
+        }
 
-<input type="password" name="view_password">
-
-<br>
-
-{% if error %}
-<p style="color:red;">{{error}}</p>
-{% endif %}
-
-<br>
-
-<button type="submit">Verify</button>
-
-</form>
-
+        // Start timer if time remaining
+        if (timeRemaining > 0) {
+            updateTimer();
+        } else {
+            timerElement.textContent = '0';
+            timerElement.classList.add('warning');
+            answerInput.disabled = true;
+            passwordInput.disabled = true;
+            submitBtn.disabled = true;
+            
+            const expiredMsg = document.createElement('div');
+            expiredMsg.className = 'timer-expired';
+            expiredMsg.innerHTML = '⏰ Time expired! Refreshing question...';
+            form.appendChild(expiredMsg);
+            
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        }
+    </script>
 </body>
 </html>

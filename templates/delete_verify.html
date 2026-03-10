@@ -1,34 +1,227 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Delete Media</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Media - Secure Media Vault</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .warning-icon {
+            text-align: center;
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        h2 {
+            font-size: 2.3em;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .warning-message {
+            background: rgba(255, 107, 107, 0.15);
+            border-left: 4px solid rgba(255, 107, 107, 0.6);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            color: #ffb3b3;
+            font-size: 1em;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 25px;
+        }
+
+        label {
+            display: block;
+            color: #e0e0e0;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            color: #ffffff;
+            font-size: 1em;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="password"]:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 107, 107, 0.6);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+            transform: translateY(-2px);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 107, 107, 0.6);
+        }
+
+        .error-message {
+            background: rgba(220, 38, 38, 0.2);
+            border: 2px solid rgba(220, 38, 38, 0.6);
+            color: #ff6b6b;
+            padding: 12px 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.95em;
+            font-weight: 600;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .cancel-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .cancel-link a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-link a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 40px 30px;
+            }
+
+            h2 {
+                font-size: 1.9em;
+            }
+
+            .warning-icon {
+                font-size: 4em;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <div class="glass-card">
+            <div class="warning-icon">⚠️</div>
+            <h2>Delete Media</h2>
 
-<h2>Delete Media</h2>
+            <div class="warning-message">
+                ⛔ This action cannot be undone! Enter your delete password to permanently remove this file.
+            </div>
 
-<p>Enter delete password to remove this file.</p>
+            <form method="POST">
+                <label>Delete Password</label>
+                <input type="password" name="delete_password" required placeholder="Enter delete password">
 
-<form method="POST">
+                <button type="submit">🗑️ Confirm Delete</button>
+                
+                {% if error %}
+                <div class="error-message">{{ error }}</div>
+                {% endif %}
+            </form>
 
-<input type="password" name="delete_password" required>
-
-<br>
-
-{% if error %}
-<p style="color:red;">{{error}}</p>
-{% endif %}
-
-<br>
-
-<button type="submit">Delete</button>
-
-</form>
-
-<br>
-
-<a href="/dashboard">Cancel</a>
-
+            <div class="cancel-link">
+                <a href="/dashboard">✖️ Cancel & Go Back</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

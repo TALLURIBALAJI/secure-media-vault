@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session, send_from_
 import sqlite3
 import os
 import random
+import time
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -23,33 +24,125 @@ ALLOWED_EXTENSIONS = {"mp4","mkv","webm","jpg","jpeg","png"}
 # Advanced Math Questions
 # -------------------------
 questions = [
-
-("Solve: 3x + 9 = 0. What is x?", "-3"),
-("Solve: 2x = 16. What is x?", "8"),
-("Solve: x² = 25. Positive value of x?", "5"),
-
-("Area of circle radius 7 (π=22/7)?", "154"),
-("Perimeter of square side 12?", "48"),
-("Area of triangle base 10 height 6?", "30"),
-
-("Distance between (0,0) and (3,4)?", "5"),
-("Slope between (1,2) and (3,6)?", "2"),
-
-("sin(90)?", "1"),
-("cos(0)?", "1"),
-("tan(45)?", "1"),
-
-("Derivative of x² at x=3?", "6"),
-("Derivative of 3x?", "3"),
-
-("∫ 2x dx at x=3 (ignore C)?", "9"),
-("∫ 1 dx from 0 to 5?", "5"),
-
-("log10(100)?", "2"),
-("log10(1000)?", "3"),
-
-("Square root of 144?", "12"),
-("2^5 ?", "32")
+    # Algebra
+    ("Solve: 3x + 9 = 0. What is x?", "-3"),
+    ("Solve: 2x = 16. What is x?", "8"),
+    ("Solve: x² = 25. Positive value of x?", "5"),
+    ("Solve: 5x - 15 = 0. What is x?", "3"),
+    ("Solve: 4x = 36. What is x?", "9"),
+    ("Solve: x + 7 = 20. What is x?", "13"),
+    ("Solve: 6x = 42. What is x?", "7"),
+    ("Solve: x/3 = 5. What is x?", "15"),
+    ("Solve: 2x + 10 = 30. What is x?", "10"),
+    ("Solve: x² = 64. Positive value of x?", "8"),
+    ("Solve: 7x - 21 = 0. What is x?", "3"),
+    ("Solve: x/4 = 3. What is x?", "12"),
+    
+    # Geometry - Area & Perimeter
+    ("Area of circle radius 7 (π=22/7)?", "154"),
+    ("Perimeter of square side 12?", "48"),
+    ("Area of triangle base 10 height 6?", "30"),
+    ("Area of rectangle length 8 width 5?", "40"),
+    ("Perimeter of rectangle length 10 width 6?", "32"),
+    ("Area of square side 9?", "81"),
+    ("Perimeter of square side 15?", "60"),
+    ("Area of triangle base 12 height 5?", "30"),
+    ("Area of circle radius 14 (π=22/7)?", "616"),
+    ("Area of square side 11?", "121"),
+    ("Perimeter of rectangle length 7 width 3?", "20"),
+    ("Area of triangle base 8 height 9?", "36"),
+    
+    # Coordinate Geometry
+    ("Distance between (0,0) and (3,4)?", "5"),
+    ("Slope between (1,2) and (3,6)?", "2"),
+    ("Distance between (0,0) and (5,12)?", "13"),
+    ("Midpoint of (2,4) and (6,8)? X-coordinate only", "4"),
+    ("Slope between (0,0) and (4,8)?", "2"),
+    
+    # Trigonometry
+    ("sin(90°)?", "1"),
+    ("cos(0°)?", "1"),
+    ("tan(45°)?", "1"),
+    ("sin(0°)?", "0"),
+    ("cos(90°)?", "0"),
+    ("sin(30°)?", "0.5"),
+    
+    # Calculus
+    ("Derivative of x² at x=3?", "6"),
+    ("Derivative of 3x?", "3"),
+    ("Derivative of 5x at x=2?", "5"),
+    ("∫ 2x dx at x=3 (ignore C)?", "9"),
+    ("∫ 1 dx from 0 to 5?", "5"),
+    ("Derivative of x³ at x=2?", "12"),
+    
+    # Logarithms
+    ("log10(100)?", "2"),
+    ("log10(1000)?", "3"),
+    ("log10(10)?", "1"),
+    ("log2(8)?", "3"),
+    ("log2(16)?", "4"),
+    ("log10(10000)?", "4"),
+    
+    # Powers & Roots
+    ("Square root of 144?", "12"),
+    ("2^5?", "32"),
+    ("Square root of 81?", "9"),
+    ("3^3?", "27"),
+    ("2^6?", "64"),
+    ("Square root of 196?", "14"),
+    ("4^3?", "64"),
+    ("2^7?", "128"),
+    ("Square root of 169?", "13"),
+    ("5^2?", "25"),
+    ("Square root of 225?", "15"),
+    ("3^4?", "81"),
+    ("2^8?", "256"),
+    ("10^3?", "1000"),
+    
+    # Arithmetic
+    ("15 × 8 = ?", "120"),
+    ("144 ÷ 12 = ?", "12"),
+    ("25 × 4 = ?", "100"),
+    ("200 ÷ 5 = ?", "40"),
+    ("18 × 5 = ?", "90"),
+    ("121 ÷ 11 = ?", "11"),
+    ("16 × 7 = ?", "112"),
+    ("169 ÷ 13 = ?", "13"),
+    ("13 × 9 = ?", "117"),
+    ("225 ÷ 15 = ?", "15"),
+    ("19 × 6 = ?", "114"),
+    ("288 ÷ 12 = ?", "24"),
+    ("23 + 47 = ?", "70"),
+    ("100 - 37 = ?", "63"),
+    ("56 + 89 = ?", "145"),
+    
+    # Number Theory
+    ("First prime after 10?", "11"),
+    ("First prime after 20?", "23"),
+    ("LCM of 4 and 6?", "12"),
+    ("GCD of 12 and 18?", "6"),
+    ("Next perfect square after 100?", "121"),
+    ("Sum of first 5 natural numbers?", "15"),
+    ("Sum of first 10 natural numbers?", "55"),
+    ("Factorial of 4?", "24"),
+    ("Factorial of 5?", "120"),
+    
+    # Percentages
+    ("20% of 200?", "40"),
+    ("50% of 80?", "40"),
+    ("25% of 100?", "25"),
+    ("10% of 500?", "50"),
+    ("75% of 80?", "60"),
+    
+    # Mixed Operations
+    ("(12 + 8) × 2 = ?", "40"),
+    ("50 - (3 × 6) = ?", "32"),
+    ("(20 ÷ 4) + 15 = ?", "20"),
+    ("100 - (25 + 30) = ?", "45"),
+    ("(15 × 2) - 10 = ?", "20"),
+    ("(36 ÷ 6) + 8 = ?", "14"),
+    ("7 × (4 + 3) = ?", "49"),
+    ("(50 - 20) ÷ 3 = ?", "10"),
 ]
 
 # -------------------------
@@ -241,14 +334,48 @@ def verify(filename):
         conn.close()
         session.pop("math_question", None)
         session.pop("math_answer", None)
+        session.pop("question_timestamp", None)
+        session.pop("used_questions", None)
         return redirect("/dashboard")
 
-    if "math_question" not in session:
-
-        q,a = random.choice(questions)
-
+    # Check if question exists and if it's expired (30 seconds)
+    current_time = time.time()
+    question_timestamp = session.get("question_timestamp", 0)
+    time_elapsed = current_time - question_timestamp
+    
+    # Generate new question if it doesn't exist or if 30 seconds have passed
+    if "math_question" not in session or time_elapsed > 30:
+        # Track used questions to avoid repeats
+        if "used_questions" not in session:
+            session["used_questions"] = []
+        
+        # Reset used questions list if all questions have been used
+        if len(session["used_questions"]) >= len(questions) - 5:
+            session["used_questions"] = []
+        
+        # Find available questions (not recently used)
+        available_questions = [
+            (i, q, a) for i, (q, a) in enumerate(questions)
+            if i not in session["used_questions"]
+        ]
+        
+        # Select random question from available ones
+        if available_questions:
+            idx, q, a = random.choice(available_questions)
+            session["used_questions"].append(idx)
+        else:
+            # Fallback: use any random question
+            idx = random.randint(0, len(questions) - 1)
+            q, a = questions[idx]
+            session["used_questions"] = [idx]
+        
         session["math_question"] = q
         session["math_answer"] = a
+        session["question_timestamp"] = current_time
+        time_remaining = 30
+    else:
+        # Question still valid, calculate remaining time
+        time_remaining = max(0, int(30 - time_elapsed))
 
     if request.method == "POST":
 
@@ -261,6 +388,7 @@ def verify(filename):
 
             session.pop("math_question",None)
             session.pop("math_answer",None)
+            session.pop("question_timestamp",None)
 
             cursor.execute(
                 "UPDATE users SET view_attempts=0 WHERE username=?",
@@ -288,23 +416,27 @@ def verify(filename):
 
                 return render_template("verify.html",
                                        question=session["math_question"],
+                                       time_remaining=0,
                                        error="Too many failed attempts. Access locked.")
-
+            
             cursor.execute(
                 "UPDATE users SET view_attempts=? WHERE username=?",
-                (attempts,session["user"])
+                (attempts, session["user"])
             )
 
             conn.commit()
             conn.close()
 
+            # Calculate new time remaining after failed attempt
+            new_time_remaining = max(0, int(30 - (time.time() - session.get("question_timestamp", time.time()))))
             return render_template("verify.html",
                                    question=session["math_question"],
+                                   time_remaining=new_time_remaining,
                                    error=f"Wrong answer or password. Attempt {attempts}/3")
 
     conn.close()
 
-    return render_template("verify.html", question=session["math_question"])
+    return render_template("verify.html", question=session["math_question"], time_remaining=time_remaining)
 
 
 # -------------------------
