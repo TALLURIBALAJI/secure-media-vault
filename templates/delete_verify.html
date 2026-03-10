@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete Media - Secure Media Vault</title>
+    <title>Delete Verification - Secure Media Vault</title>
     <style>
         * {
             margin: 0;
@@ -12,41 +12,110 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', 'Helvetica', sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            overflow-x: hidden;
+            background: radial-gradient(ellipse at center, #1a1633 0%, #0d0b1a 50%, #000000 100%);
+            position: relative;
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        .container {
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(220, 38, 38, 0.7);
+            border-radius: 50%;
+            animation: particleFloat 15s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay:  0s; animation-duration: 20s; }
+        .particle:nth-child(2) { left: 25%; animation-delay: 3s; animation-duration: 25s; }
+        .particle:nth-child(3) { left: 40%; animation-delay: 6s; animation-duration: 18s; }
+        .particle:nth-child(4) { left: 55%; animation-delay: 9s; animation-duration: 22s; }
+        .particle:nth-child(5) { left: 70%; animation-delay: 12s; animation-duration: 24s; }
+        .particle:nth-child(6) { left: 85%; animation-delay: 15s; animation-duration: 19s; }
+
+        @keyframes particleFloat {
+            0%, 100% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Red glow effects - more intense for delete warning */
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 1;
+            animation: orbPulse 6s ease-in-out infinite;
+        }
+
+        .glow-orb-1 {
+            width: 450px;
+            height: 450px;
+            background: #dc2626;
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .glow-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: #991b1b;
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 3s;
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.3); opacity: 0.3; }
+        }
+
+        /* Delete container */
+        .delete-container {
+            position: relative;
+            z-index: 10;
             width: 90%;
             max-width: 500px;
+            animation: slideIn 0.8s ease-out;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 50px 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        @keyframes fadeInUp {
+        @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
@@ -54,173 +123,296 @@
             }
         }
 
+        /* Card */
+        .delete-card {
+            background: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 50px 40px;
+            box-shadow: 
+                0 0 80px rgba(220, 38, 38, 0.5),
+                inset 0 0 80px rgba(220, 38, 38, 0.1);
+            border: 2px solid rgba(220, 38, 38, 0.5);
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #dc2626;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(220, 38, 38, 1);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #fca5a5;
+            font-size: 0.95em;
+            margin-bottom: 35px;
+            letter-spacing: 1px;
+        }
+
+        /* Warning icon */
         .warning-icon {
             text-align: center;
-            font-size: 5em;
-            margin-bottom: 20px;
-            animation: pulse 2s ease-in-out infinite;
+            font-size: 4em;
+            margin-bottom: 25px;
+            animation: pulse 1.5s ease-in-out infinite;
         }
 
         @keyframes pulse {
             0%, 100% {
                 transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.8));
             }
             50% {
-                transform: scale(1.1);
+                transform: scale(1.15);
+                filter: drop-shadow(0 0 40px rgba(220, 38, 38, 1));
             }
         }
 
-        h2 {
-            font-size: 2.3em;
-            color: #ffffff;
-            text-align: center;
-            margin-bottom: 15px;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-
+        /* Warning message */
         .warning-message {
-            background: rgba(255, 107, 107, 0.15);
-            border-left: 4px solid rgba(255, 107, 107, 0.6);
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            color: #ffb3b3;
-            font-size: 1em;
-            text-align: center;
+            background: rgba(220, 38, 38, 0.2);
+            border: 2px solid #dc2626;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
         }
 
-        form {
-            margin-top: 25px;
+        .warning-message h3 {
+            color: #dc2626;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .warning-message p {
+            color: #fca5a5;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .file-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 25px;
         }
 
         label {
             display: block;
-            color: #e0e0e0;
-            font-size: 0.95em;
+            color: #fca5a5;
             margin-bottom: 8px;
-            font-weight: 500;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         input[type="password"] {
             width: 100%;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(220, 38, 38, 0.5);
+            border-radius: 8px;
             color: #ffffff;
             font-size: 1em;
-            margin-bottom: 20px;
             transition: all 0.3s ease;
-            outline: none;
         }
 
         input[type="password"]:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 107, 107, 0.6);
-            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
-            transform: translateY(-2px);
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.6);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: #991b1b;
         }
 
-        button[type="submit"] {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-            border: none;
-            border-radius: 15px;
-            color: white;
-            font-size: 1.1em;
-            font-weight: 600;
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            font-size: 1em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-        }
-
-        button[type="submit"]:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(255, 107, 107, 0.6);
-        }
-
-        .error-message {
-            background: rgba(220, 38, 38, 0.2);
-            border: 2px solid rgba(220, 38, 38, 0.6);
-            color: #ff6b6b;
-            padding: 12px 15px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 15px;
-            font-size: 0.95em;
-            font-weight: 600;
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        .cancel-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .cancel-link a {
-            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.4s ease;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
             text-decoration: none;
-            font-size: 0.95em;
-            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
         }
 
-        .cancel-link a:hover {
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-delete {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #991b1b;
+            box-shadow: 0 0 40px rgba(220, 38, 38, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background: transparent;
+            color: #9ca3af;
+            border-color: rgba(156, 163, 175, 0.5);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #ffffff;
             color: #ffffff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
         }
 
-        @media (max-width: 480px) {
-            .glass-card {
+        /* Back link */
+        .back-link {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .back-link a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-link a:hover {
+            color: #ffffff;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .delete-card {
                 padding: 40px 30px;
             }
 
             h2 {
-                font-size: 1.9em;
+                font-size: 2em;
             }
 
             .warning-icon {
-                font-size: 4em;
+                font-size: 3.5em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .delete-card {
+                padding: 30px 20px;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            .warning-message p {
+                font-size: 0.9em;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="glass-card">
+    <!-- Animated particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Glow orbs -->
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <!-- Delete Container -->
+    <div class="delete-container">
+        <div class="back-link">
+            <a href="/dashboard">← Back to Dashboard</a>
+        </div>
+        <div class="delete-card">
             <div class="warning-icon">⚠️</div>
-            <h2>Delete Media</h2>
+            <h2>Danger Zone</h2>
+            <p class="subtitle">This action cannot be undone!</p>
 
             <div class="warning-message">
-                ⛔ This action cannot be undone! Enter your delete password to permanently remove this file.
+                <h3>⚔️ Critical Warning</h3>
+                <p>
+                    You are about to <strong>permanently delete</strong> this file from your secure vault.
+                    This action is irreversible and the file cannot be recovered.
+                </p>
+                <div class="file-info">
+                    📁 File: {{ filename }}
+                </div>
             </div>
 
-            <form method="POST">
-                <label>Delete Password</label>
-                <input type="password" name="delete_password" required placeholder="Enter delete password">
+            <form method="POST" action="/delete/{{ filename }}">
+                <div class="form-group">
+                    <label for="delete_password">Enter Delete Password to Confirm</label>
+                    <input type="password" id="delete_password" name="delete_password" placeholder="Delete password required" required>
+                </div>
 
-                <button type="submit">🗑️ Confirm Delete</button>
-                
-                {% if error %}
-                <div class="error-message">{{ error }}</div>
-                {% endif %}
+                <div class="button-group">
+                    <button type="submit" class="btn btn-delete">🗑️ Delete Forever</button>
+                    <a href="/dashboard" class="btn btn-cancel">Cancel</a>
+                </div>
             </form>
-
-            <div class="cancel-link">
-                <a href="/dashboard">✖️ Cancel & Go Back</a>
-            </div>
         </div>
     </div>
 </body>

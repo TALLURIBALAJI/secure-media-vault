@@ -12,33 +12,20 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', 'Helvetica', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: radial-gradient(ellipse at center, #1a1633 0%, #0d0b1a 50%, #000000 100%);
+            position: relative;
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            padding: 40px 0;
+            padding: 20px 0;
         }
 
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* Floating background shapes */
-        .background-shapes {
+        /* Animated background particles */
+        .particles {
             position: fixed;
             top: 0;
             left: 0;
@@ -46,85 +33,89 @@
             height: 100%;
             overflow: hidden;
             z-index: 1;
+            pointer-events: none;
         }
 
-        .shape {
+        .particle {
             position: absolute;
-            background: rgba(255, 255, 255, 0.03);
+            width: 2px;
+            height: 2px;
+            background: rgba(220, 38, 38, 0.6);
             border-radius: 50%;
-            animation: float 20s infinite ease-in-out;
+            animation: particleFloat 15s infinite ease-in-out;
         }
 
-        .shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 10%;
-            left: 20%;
-            animation-delay: 0s;
-            animation-duration: 25s;
-        }
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 20s; }
+        .particle:nth-child(2) { left: 25%; animation-delay: 3s; animation-duration: 25s; }
+        .particle:nth-child(3) { left: 40%; animation-delay: 6s; animation-duration: 18s; }
+        .particle:nth-child(4) { left: 55%; animation-delay: 9s; animation-duration: 22s; }
+        .particle:nth-child(5) { left: 70%; animation-delay: 12s; animation-duration: 24s; }
+        .particle:nth-child(6) { left: 85%; animation-delay: 15s; animation-duration: 19s; }
 
-        .shape:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            top: 60%;
-            left: 80%;
-            animation-delay: 3s;
-            animation-duration: 20s;
-        }
-
-        .shape:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            top: 80%;
-            left: 10%;
-            animation-delay: 6s;
-            animation-duration: 30s;
-        }
-
-        .shape:nth-child(4) {
-            width: 100px;
-            height: 100px;
-            top: 30%;
-            left: 70%;
-            animation-delay: 9s;
-            animation-duration: 22s;
-        }
-
-        @keyframes float {
+        @keyframes particleFloat {
             0%, 100% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0.3;
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
             }
-            50% {
-                transform: translate(-30px, -60px) scale(1.1);
-                opacity: 0.5;
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
             }
         }
 
-        /* Main container */
-        .container {
+        /* Red glow effects */
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+            animation: orbPulse 8s ease-in-out infinite;
+        }
+
+        .glow-orb-1 {
+            width: 400px;
+            height: 400px;
+            background: #dc2626;
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .glow-orb-2 {
+            width: 350px;
+            height: 350px;
+            background: #991b1b;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: 4s;
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { transform: scale(1); opacity: 0.15; }
+            50% { transform: scale(1.2); opacity: 0.25; }
+        }
+
+        /* Register container */
+        .register-container {
             position: relative;
             z-index: 10;
             width: 90%;
             max-width: 500px;
+            animation: slideIn 0.8s ease-out;
         }
 
-        /* Glassmorphism card */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 50px 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        @keyframes fadeInUp {
+        @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
@@ -132,219 +123,286 @@
             }
         }
 
-        /* Title */
+        /* Card */
+        .register-card {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 50px 40px;
+            box-shadow: 
+                0 0 60px rgba(220, 38, 38, 0.3),
+                inset 0 0 80px rgba(220, 38, 38, 0.05);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
         h2 {
-            font-size: 2.3em;
+            font-size: 2.5em;
             color: #ffffff;
             text-align: center;
             margin-bottom: 15px;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            animation: glowPulse 3s ease-in-out infinite;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(220, 38, 38, 0.8);
         }
 
-        @keyframes glowPulse {
-            0%, 100% {
-                text-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
-                             0 0 40px rgba(138, 43, 226, 0.4);
-            }
-            50% {
-                text-shadow: 0 0 30px rgba(255, 255, 255, 0.5),
-                             0 0 60px rgba(138, 43, 226, 0.6);
-            }
-        }
-
-        /* Lock icon */
-        .lock-icon {
-            text-align: center;
-            font-size: 3em;
-            margin-bottom: 10px;
-            animation: fadeIn 1.2s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Subtitle */
         .subtitle {
             text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9em;
-            margin-bottom: 30px;
+            color: #9ca3af;
+            font-size: 0.95em;
+            margin-bottom: 35px;
+            letter-spacing: 1px;
+        }
+
+        /* Shield icon */
+        .shield-icon {
+            text-align: center;
+            font-size: 3.5em;
+            margin-bottom: 25px;
+            animation: rotate360 4s ease-in-out infinite;
+        }
+
+        @keyframes rotate360 {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(10deg);
+            }
+        }
+
+        /* Security info */
+        .security-info {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .security-info h3 {
+            color: #dc2626;
+            font-size: 1em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .security-info p {
+            color: #d1d5db;
+            font-size: 0.85em;
+            line-height: 1.5;
         }
 
         /* Form */
-        form {
-            margin-top: 25px;
+        .form-group {
+            margin-bottom: 25px;
         }
 
         label {
             display: block;
-            color: #e0e0e0;
-            font-size: 0.95em;
+            color: #d1d5db;
             margin-bottom: 8px;
-            font-weight: 500;
+            font-size: 0.9em;
+            font-weight: 600;
             letter-spacing: 0.5px;
         }
 
         input[type="text"],
         input[type="password"] {
             width: 100%;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
+            padding: 15px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 8px;
             color: #ffffff;
             font-size: 1em;
-            margin-bottom: 20px;
             transition: all 0.3s ease;
-            outline: none;
         }
 
         input[type="text"]:focus,
         input[type="password"]:focus {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(138, 43, 226, 0.6);
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
-            transform: translateY(-2px);
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: #6b7280;
         }
 
         /* Button */
-        button[type="submit"] {
+        .btn-register {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 15px;
+            padding: 16px;
+            background: #dc2626;
             color: white;
+            border: 2px solid #dc2626;
+            border-radius: 8px;
             font-size: 1.1em;
-            font-weight: 600;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
-            margin-top: 10px;
         }
 
-        button[type="submit"]::before {
+        .btn-register::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
             background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            transition: left 0.5s ease;
         }
 
-        button[type="submit"]:hover::before {
-            width: 400px;
-            height: 400px;
+        .btn-register:hover::before {
+            left: 100%;
         }
 
-        button[type="submit"]:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+        .btn-register:hover {
+            background: #b91c1c;
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.6);
+            transform: translateY(-2px);
         }
 
-        button[type="submit"]:active {
+        .btn-register:active {
             transform: translateY(0);
+        }
+
+        /* Link */
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #9ca3af;
+            font-size: 0.9em;
+        }
+
+        .login-link a {
+            color: #dc2626;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #ef4444;
+            text-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
         }
 
         /* Back link */
         .back-link {
             text-align: center;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .back-link a {
-            color: rgba(255, 255, 255, 0.7);
+            color: #9ca3af;
             text-decoration: none;
-            font-size: 0.95em;
+            font-size: 0.9em;
             transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .back-link a:hover {
             color: #ffffff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
-        /* Security note */
-        .security-note {
-            background: rgba(138, 43, 226, 0.15);
-            border-left: 3px solid rgba(138, 43, 226, 0.6);
-            padding: 12px 15px;
-            border-radius: 10px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.85em;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .glass-card {
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .register-card {
                 padding: 40px 30px;
             }
 
             h2 {
-                font-size: 1.9em;
+                font-size: 2em;
+            }
+
+            .shield-icon {
+                font-size: 3em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .register-card {
+                padding: 30px 20px;
+            }
+
+            h2 {
+                font-size: 1.8em;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Background floating shapes -->
-    <div class="background-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
+    <!-- Animated particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
     </div>
 
-    <!-- Main content -->
-    <div class="container">
-        <div class="glass-card">
-            <div class="lock-icon">🔐</div>
-            <h2>User Registration</h2>
-            <p class="subtitle">Create your secure account with multi-layer protection</p>
-            
-            <div class="security-note">
-                ℹ️ Set up three different passwords for enhanced security layers
+    <!-- Glow orbs -->
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <!-- Register Container -->
+    <div class="register-container">
+        <div class="back-link">
+            <a href="/">← Back to Home</a>
+        </div>
+        <div class="register-card">
+            <div class="shield-icon">🛡️</div>
+            <h2>Register</h2>
+            <p class="subtitle">Create Your Secure Vault</p>
+
+            <div class="security-info">
+                <h3>🔒 Triple-Layer Security</h3>
+                <p>You will set three separate passwords for maximum protection:</p>
+                <p style="margin-top: 8px;">
+                    <strong>1. Login Password</strong> - Access your vault<br>
+                    <strong>2. View Password</strong> - View your media<br>
+                    <strong>3. Delete Password</strong> - Remove media files
+                </p>
             </div>
 
-            <form method="POST">
-                <label>Username</label>
-                <input type="text" name="username" required placeholder="Choose a username">
+            <form method="POST" action="/register">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Choose a username" required>
+                </div>
 
-                <label>Login Password</label>
-                <input type="password" name="login_password" required placeholder="Password for account login">
+                <div class="form-group">
+                    <label for="login_password">Login Password</label>
+                    <input type="password" id="login_password" name="login_password" placeholder="For vault access" required>
+                </div>
 
-                <label>View Password</label>
-                <input type="password" name="view_password" required placeholder="Password to view media">
+                <div class="form-group">
+                    <label for="view_password">View Password</label>
+                    <input type="password" id="view_password" name="view_password" placeholder="For viewing media" required>
+                </div>
 
-                <label>Delete Password</label>
-                <input type="password" name="delete_password" required placeholder="Password to delete media">
+                <div class="form-group">
+                    <label for="delete_password">Delete Password</label>
+                    <input type="password" id="delete_password" name="delete_password" placeholder="For deleting media" required>
+                </div>
 
-                <button type="submit">Register</button>
+                <button type="submit" class="btn-register">Create Vault</button>
             </form>
 
-            <div class="back-link">
-                <a href="/">← Back to Home</a>
+            <div class="login-link">
+                Already have an account? <a href="/login">Login Here</a>
             </div>
         </div>
     </div>

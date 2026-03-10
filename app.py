@@ -379,12 +379,16 @@ def verify(filename):
 
     if request.method == "POST":
 
-        user_answer = request.form.get("answer")
-        view_password = request.form.get("view_password")
+        user_answer = request.form.get("answer", "").strip()
+        view_password = request.form.get("view_password", "").strip()
 
         correct_answer = session.get("math_answer")
 
-        if user_answer == correct_answer or check_password_hash(stored_password, view_password):
+        # Check if either answer is correct OR password is correct
+        answer_correct = user_answer and user_answer == correct_answer
+        password_correct = view_password and check_password_hash(stored_password, view_password)
+
+        if answer_correct or password_correct:
 
             session.pop("math_question",None)
             session.pop("math_answer",None)
@@ -415,6 +419,7 @@ def verify(filename):
                 conn.close()
 
                 return render_template("verify.html",
+                                       filename=filename,
                                        question=session["math_question"],
                                        time_remaining=0,
                                        error="Too many failed attempts. Access locked.")
@@ -430,13 +435,14 @@ def verify(filename):
             # Calculate new time remaining after failed attempt
             new_time_remaining = max(0, int(30 - (time.time() - session.get("question_timestamp", time.time()))))
             return render_template("verify.html",
+                                   filename=filename,
                                    question=session["math_question"],
                                    time_remaining=new_time_remaining,
                                    error=f"Wrong answer or password. Attempt {attempts}/3")
 
     conn.close()
 
-    return render_template("verify.html", question=session["math_question"], time_remaining=time_remaining)
+    return render_template("verify.html", filename=filename, question=session["math_question"], time_remaining=time_remaining)
 
 
 # -------------------------
@@ -448,13 +454,24 @@ def view_media(filename):
     if "user" not in session:
         return redirect("/login")
 
-    return render_template("view_media.html", file=filename)
+    # Determine file type based on extension
+    file_ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
+    
+    if file_ext in ['mp4', 'mkv', 'webm', 'avi', 'mov']:
+        file_type = 'video'
+    elif file_ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']:
+        file_type = 'image'
+    else:
+        file_type = 'video'  # default to video
+    
+    return render_template("view_media.html", filename=filename, file_type=file_type)
 
 
 # -------------------------
 # DELETE MEDIA
 # -------------------------
 @app.route("/delete/<filename>", methods=["GET","POST"])
+@app.route("/delete_verify/<filename>", methods=["GET","POST"])
 def delete_media(filename):
 
     if "user" not in session:

@@ -12,45 +12,83 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', 'Helvetica', sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            padding: 40px 20px;
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.75), rgba(13, 11, 26, 0.85)),
+                url('/static/images/samurai-bg.jpg') center center / cover no-repeat fixed;
+            color: #ffffff;
+            padding: 20px;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(26, 22, 51, 0.3) 50%, rgba(0, 0, 0, 0.6) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        body > * {
+            position: relative;
+            z-index: 2;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        /* Red glow background */
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 1;
+            animation: orbPulse 10s ease-in-out infinite;
+        }
+
+        .glow-orb-1 {
+            width: 500px;
+            height: 500px;
+            background: #dc2626;
+            top: -150px;
+            right: -150px;
+        }
+
+        .glow-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: #991b1b;
+            bottom: -150px;
+            left: -150px;
+            animation-delay: 5s;
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { transform: scale(1); opacity: 0.1; }
+            50% { transform: scale(1.3); opacity: 0.2; }
         }
 
         /* Container */
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            position: relative;
+            z-index: 10;
         }
 
         /* Header */
         .header {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(20, 20, 20, 0.8);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
+            border-radius: 15px;
             padding: 30px 40px;
             margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            box-shadow: 0 0 40px rgba(220, 38, 38, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -58,23 +96,28 @@
             gap: 20px;
         }
 
-        h2 {
+        .welcome-section h2 {
             color: #ffffff;
             font-size: 2em;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(220, 38, 38, 0.8);
+            margin-bottom: 8px;
         }
 
-        .welcome {
-            color: #d1d1d1;
-            font-size: 1.1em;
+        .welcome-section p {
+            color: #9ca3af;
+            font-size: 1em;
         }
 
         .user-icon {
-            font-size: 1.5em;
+            font-size: 1.3em;
+            margin-right: 8px;
         }
 
         /* Action buttons */
-        .action-bar {
+        .action-buttons {
             display: flex;
             gap: 15px;
             align-items: center;
@@ -84,51 +127,79 @@
         .btn {
             text-decoration: none;
             padding: 12px 30px;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: all 0.3s ease;
             font-size: 0.95em;
-            border: 2px solid transparent;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            transition: all 0.4s ease;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-upload {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #dc2626;
             color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            border-color: #dc2626;
         }
 
         .btn-upload:hover {
+            background: #b91c1c;
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.6);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
 
         .btn-logout {
             background: transparent;
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: #9ca3af;
+            border-color: rgba(156, 163, 175, 0.5);
         }
 
         .btn-logout:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(220, 38, 38, 0.1);
+            border-color: #dc2626;
+            color: #ffffff;
             transform: translateY(-2px);
         }
 
         /* File list container */
         .file-list-container {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(20, 20, 20, 0.8);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 35px;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            box-shadow: 0 0 40px rgba(220, 38, 38, 0.2);
         }
 
         .file-list-header {
             color: #ffffff;
-            font-size: 1.3em;
-            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
             padding-bottom: 15px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 2px solid rgba(220, 38, 38, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .file-row {
@@ -137,61 +208,103 @@
             align-items: center;
             padding: 18px 20px;
             margin-bottom: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(220, 38, 38, 0.2);
             transition: all 0.3s ease;
         }
 
         .file-row:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            background: rgba(220, 38, 38, 0.1);
+            border-color: #dc2626;
+            transform: translateX(8px);
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
         }
 
         .file-name {
-            color: #e0e0e0;
+            color: #ffffff;
             font-size: 1.05em;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .file-icon {
             font-size: 1.3em;
         }
 
-        .view-btn {
-            padding: 10px 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 20px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        .file-actions {
+            display: flex;
+            gap: 12px;
         }
 
-        .view-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.5);
+        .file-actions a {
+            text-decoration: none;
+            padding: 8px 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: 1px solid;
+        }
+
+        .btn-view {
+            background: transparent;
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-view:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-delete {
+            background: transparent;
+            color: #dc2626;
+            border-color: rgba(220, 38, 38, 0.5);
+        }
+
+        .btn-delete:hover {
+            background: rgba(220, 38, 38, 0.2);
+            border-color: #dc2626;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
         }
 
         .no-files {
             text-align: center;
-            color: rgba(255, 255, 255, 0.6);
-            padding: 40px;
+            color: #9ca3af;
             font-size: 1.1em;
+            padding: 50px 20px;
         }
 
-        /* Responsive */
+        .no-files-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Responsive design */
         @media (max-width: 768px) {
             .header {
-                padding: 20px 25px;
+                padding: 25px 30px;
             }
 
-            h2 {
-                font-size: 1.5em;
+            .welcome-section h2 {
+                font-size: 1.6em;
+            }
+
+            .action-buttons {
+                width: 100%;
+            }
+
+            .btn {
+                flex: 1;
+                text-align: center;
             }
 
             .file-row {
@@ -200,44 +313,69 @@
                 align-items: flex-start;
             }
 
-            .view-btn {
+            .file-actions {
                 width: 100%;
+            }
+
+            .file-actions a {
+                flex: 1;
                 text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .file-list-container {
+                padding: 25px 20px;
+            }
+
+            .file-list-header {
+                font-size: 1.2em;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Glow orbs -->
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <!-- Container -->
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div>
-                <h2>🛡️ Secure Media Vault</h2>
-                <p class="welcome"><span class="user-icon">👤</span> Welcome, <strong>{{username}}</strong></p>
+            <div class="welcome-section">
+                <h2>🗡️ Your Vault</h2>
+                <p><span class="user-icon">⚔️</span>Welcome, <strong>{{ username }}</strong></p>
             </div>
-            <div class="action-bar">
-                <a href="/upload" class="btn btn-upload">📤 Upload Media</a>
-                <a href="/logout" class="btn btn-logout">🚪 Logout</a>
+            <div class="action-buttons">
+                <a href="/upload" class="btn btn-upload">Upload Media</a>
+                <a href="/logout" class="btn btn-logout">Logout</a>
             </div>
         </div>
 
-        <!-- File List -->
+        <!-- File list -->
         <div class="file-list-container">
-            <div class="file-list-header">📁 Your Media Files</div>
-            
+            <div class="file-list-header">
+                📁 Stored Media Files
+            </div>
+
             {% if files %}
                 {% for file in files %}
                 <div class="file-row">
-                    <span class="file-name">
-                        <span class="file-icon">📄</span>
-                        {{file}}
-                    </span>
-                    <a class="view-btn" href="/verify/{{file}}">👁️ View</a>
+                    <div class="file-name">
+                        <span class="file-icon">🎬</span>
+                        {{ file }}
+                    </div>
+                    <div class="file-actions">
+                        <a href="/verify/{{ file }}" class="btn-view">View</a>
+                        <a href="/delete_verify/{{ file }}" class="btn-delete">Delete</a>
+                    </div>
                 </div>
                 {% endfor %}
             {% else %}
                 <div class="no-files">
-                    No media files uploaded yet. Click "Upload Media" to get started! 🚀
+                    <div class="no-files-icon">📂</div>
+                    <p>Your vault is empty. Upload your first media file to get started.</p>
                 </div>
             {% endif %}
         </div>
