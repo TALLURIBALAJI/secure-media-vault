@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Delete Media</title>
+</head>
+
+<body>
+
+<h2>Delete Media</h2>
+
+<p>Enter delete password to remove this file.</p>
+
+<form method="POST">
+
+<input type="password" name="delete_password" required>
+
+<br>
+
+{% if error %}
+<p style="color:red;">{{error}}</p>
+{% endif %}
+
+<br>
+
+<button type="submit">Delete</button>
+
+</form>
+
+<br>
+
+<a href="/dashboard">Cancel</a>
+
+</body>
+</html>

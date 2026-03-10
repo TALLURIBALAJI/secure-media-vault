@@ -2,37 +2,72 @@
 <html>
 <head>
 <title>Dashboard</title>
+
+<style>
+
+body{
+    font-family: Arial;
+}
+
+.file-list{
+    width:70%;
+}
+
+.file-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #ccc;
+    padding:10px 0;
+}
+
+.file-name{
+    font-size:16px;
+}
+
+.view-btn{
+    padding:6px 14px;
+    background-color:#007bff;
+    color:white;
+    text-decoration:none;
+    border-radius:4px;
+}
+
+.view-btn:hover{
+    background-color:#0056b3;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h2>Welcome {{username}}</h2>
+<h2>Secure Media Vault</h2>
 
-<a href="/upload">Upload File</a>
+<p>Welcome {{username}}</p>
+
+<a href="/upload">Upload Media</a>
 
 <br><br>
 
-<h3>Your Files</h3>
+<div class="file-list">
 
 {% for file in files %}
 
-<p>{{file}}</p>
+<div class="file-row">
 
-{% if file.endswith('.mp4') or file.endswith('.mkv') or file.endswith('.webm') %}
+<span class="file-name">{{file}}</span>
 
-<video width="400" controls>
-<source src="/media/{{file}}">
-</video>
+<a class="view-btn" href="/verify/{{file}}">View</a>
 
-{% elif file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.png') %}
-
-<img src="/media/{{file}}" width="300">
-
-{% endif %}
-
-<br><br>
+</div>
 
 {% endfor %}
+
+</div>
+
+<br>
 
 <a href="/logout">Logout</a>
 

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Access Verification</title>
+</head>
+
+<body>
+
+<h2>Media Access Verification</h2>
+
+<h3>Solve Math Question</h3>
+
+<p>{{question}}</p>
+
+<form method="POST">
+
+<input type="text" name="answer" placeholder="Enter answer">
+
+<br><br>
+
+OR
+
+<br><br>
+
+<label>Enter View Password</label><br>
+
+<input type="password" name="view_password">
+
+<br>
+
+{% if error %}
+<p style="color:red;">{{error}}</p>
+{% endif %}
+
+<br>
+
+<button type="submit">Verify</button>
+
+</form>
+
+</body>
+</html>
