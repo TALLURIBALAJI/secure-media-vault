@@ -92,7 +92,7 @@ init_db()
 # -------------------------
 @app.route("/")
 def home():
-    return redirect("/login")
+    return render_template("index.html")
 
 
 # -------------------------
@@ -156,7 +156,6 @@ def login():
         user = cursor.fetchone()
 
         if user and check_password_hash(user[0], password):
-
             session["user"] = username
 
             # Reset security locks on login
@@ -173,11 +172,10 @@ def login():
             conn.close()
 
             return redirect("/dashboard")
-
         else:
-
+            # Either username or password is wrong
             conn.close()
-            return "Invalid login"
+            return render_template("login.html", error="Wrong credentials")
 
     return render_template("login.html")
 

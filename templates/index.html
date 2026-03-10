@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Media Vault - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Floating background shapes */
+        .background-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 20%;
+            animation-delay: 0s;
+            animation-duration: 25s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 3s;
+            animation-duration: 20s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 10%;
+            animation-delay: 6s;
+            animation-duration: 30s;
+        }
+
+        .shape:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 70%;
+            animation-delay: 9s;
+            animation-duration: 22s;
+        }
+
+        .shape:nth-child(5) {
+            width: 90px;
+            height: 90px;
+            top: 50%;
+            left: 15%;
+            animation-delay: 12s;
+            animation-duration: 28s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: translate(30px, -50px) scale(1.1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-20px, -80px) scale(0.9);
+                opacity: 0.4;
+            }
+            75% {
+                transform: translate(40px, -30px) scale(1.05);
+                opacity: 0.6;
+            }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 60px 50px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Title animation */
+        .title {
+            font-size: 3.5em;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            letter-spacing: 3px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            line-height: 1.3;
+        }
+
+        .word {
+            display: inline-flex;
+        }
+
+        .letter {
+            display: inline-block;
+            animation: popUp 0.6s ease-out backwards, glowPulse 3s ease-in-out infinite;
+            margin: 0 2px;
+        }
+
+        /* Different animation delays for each letter */
+        /* "Secure" word */
+        .word:nth-child(1) .letter:nth-child(1) { animation-delay: 0s; }
+        .word:nth-child(1) .letter:nth-child(2) { animation-delay: 0.05s; }
+        .word:nth-child(1) .letter:nth-child(3) { animation-delay: 0.1s; }
+        .word:nth-child(1) .letter:nth-child(4) { animation-delay: 0.15s; }
+        .word:nth-child(1) .letter:nth-child(5) { animation-delay: 0.2s; }
+        .word:nth-child(1) .letter:nth-child(6) { animation-delay: 0.25s; }
+        
+        /* "Media" word */
+        .word:nth-child(2) .letter:nth-child(1) { animation-delay: 0.3s; }
+        .word:nth-child(2) .letter:nth-child(2) { animation-delay: 0.35s; }
+        .word:nth-child(2) .letter:nth-child(3) { animation-delay: 0.4s; }
+        .word:nth-child(2) .letter:nth-child(4) { animation-delay: 0.45s; }
+        .word:nth-child(2) .letter:nth-child(5) { animation-delay: 0.5s; }
+        
+        /* "Vault" word */
+        .word:nth-child(3) .letter:nth-child(1) { animation-delay: 0.55s; }
+        .word:nth-child(3) .letter:nth-child(2) { animation-delay: 0.6s; }
+        .word:nth-child(3) .letter:nth-child(3) { animation-delay: 0.65s; }
+        .word:nth-child(3) .letter:nth-child(4) { animation-delay: 0.7s; }
+        .word:nth-child(3) .letter:nth-child(5) { animation-delay: 0.75s; }
+
+        @keyframes popUp {
+            0% {
+                opacity: 0;
+                transform: scale(0) translateY(30px);
+            }
+            50% {
+                transform: scale(1.2) translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+                             0 0 40px rgba(138, 43, 226, 0.4);
+            }
+            50% {
+                text-shadow: 0 0 30px rgba(255, 255, 255, 0.5),
+                             0 0 60px rgba(138, 43, 226, 0.6),
+                             0 0 80px rgba(138, 43, 226, 0.4);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .word {
+            animation: fadeIn 1.8s ease-out;
+        }
+
+        /* Shield icon */
+        .shield-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: scaleIn 1s ease-out;
+            filter: drop-shadow(0 0 20px rgba(138, 43, 226, 0.6));
+        }
+
+        @keyframes scaleIn {
+            0% {
+                opacity: 0;
+                transform: scale(0) rotate(-180deg);
+            }
+            70% {
+                transform: scale(1.15) rotate(10deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        /* Subtitle */
+        .subtitle {
+            font-size: 1.3em;
+            color: #d1d1d1;
+            margin-bottom: 40px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            animation: fadeIn 2s ease-out;
+        }
+
+        /* Buttons container */
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            animation: fadeIn 2.5s ease-out;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 15px 45px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-login:hover {
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .btn-register {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-register:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9em;
+            letter-spacing: 1px;
+            z-index: 10;
+            animation: fadeIn 3s ease-out;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5em;
+                gap: 5px;
+            }
+
+            .letter {
+                margin: 0 1px;
+            }
+
+            .subtitle {
+                font-size: 1.1em;
+            }
+
+            .glass-card {
+                padding: 40px 30px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2em;
+                gap: 3px;
+                letter-spacing: 1px;
+            }
+
+            .letter {
+                margin: 0;
+            }
+
+            .subtitle {
+                font-size: 1em;
+            }
+
+            .glass-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background floating shapes -->
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="container">
+        <div class="glass-card">
+            <div class="shield-icon">🛡️</div>
+            <h1 class="title">
+                <span class="word">
+                    <span class="letter">S</span>
+                    <span class="letter">e</span>
+                    <span class="letter">c</span>
+                    <span class="letter">u</span>
+                    <span class="letter">r</span>
+                    <span class="letter">e</span>
+                </span>
+                <span class="word">
+                    <span class="letter">M</span>
+                    <span class="letter">e</span>
+                    <span class="letter">d</span>
+                    <span class="letter">i</span>
+                    <span class="letter">a</span>
+                </span>
+                <span class="word">
+                    <span class="letter">V</span>
+                    <span class="letter">a</span>
+                    <span class="letter">u</span>
+                    <span class="letter">l</span>
+                    <span class="letter">t</span>
+                </span>
+            </h1>
+            <p class="subtitle">A Secure Multi-Layer Media Protection System</p>
+            
+            <div class="buttons">
+                <a href="/login" class="btn btn-login">
+                    <span>Login</span>
+                </a>
+                <a href="/register" class="btn btn-register">
+                    <span>Register</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Developed by TALLURI BALAJI
+    </div>
+</body>
+</html>
